@@ -84,8 +84,8 @@ def login_user():
     #print(auth_url)
     #print("ooh")
     #return redirect(auth_url)
-    user_id = sp_oauth.me()['id']
-    return user_id
+    #user_id = sp_oauth.me()['id']
+    return sp_oauth
 
 @app.route("/api_callback/")
 def api_callback():
