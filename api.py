@@ -65,15 +65,15 @@ def test():
 def login_user():
     global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
-    user_id = sp.me()['id']
+    #user_id = sp.me()['id']
     user_name = sp.me()['display_name']
-    user_profile_pic = sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png'
-    spotify_obj = sp
-    top_tracks_all_terms = get_top_tracks_all_terms(spotify_obj)
-    top_artists_all_terms = get_top_artists_all_terms(spotify_obj)
-    db = Database()
-    with session_scope(db) as session:
-        update_user_data(user_id, db, session)
+   # user_profile_pic = sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png'
+    #spotify_obj = sp
+    #top_tracks_all_terms = get_top_tracks_all_terms(spotify_obj)
+    #top_artists_all_terms = get_top_artists_all_terms(spotify_obj)
+    #db = Database()
+    #with session_scope(db) as session:
+       # update_user_data(user_id, db, session)
 
     return str(user_name) 
     """
