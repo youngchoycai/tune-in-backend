@@ -85,6 +85,10 @@ def login_user():
     #print("ooh")
     #return redirect(auth_url)
     #user_id = sp_oauth.me()['id']
+    results = sp_oauth.current_user_saved_tracks()
+    for idx, item in enumerate(results['items']):
+        track = item['track']
+        print(idx, track['artists'][0]['name'], " – ", track['name'])
     return "uwu"
 
 @app.route("/api_callback/")
