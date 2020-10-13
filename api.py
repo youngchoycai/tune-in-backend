@@ -79,7 +79,7 @@ def login_user():
 
     return str(user_name) 
     """
-    sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope))
+    sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     print("ooh")
