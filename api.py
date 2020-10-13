@@ -48,8 +48,8 @@ user_name = None
 user_profile_pic = None
 
 @app.route('/')
-def serve():
-    return send_from_directory(app.static_folder, 'index.html')
+def hello():
+    return jsonify("hello")
 
 
 @app.route('/api/login')
