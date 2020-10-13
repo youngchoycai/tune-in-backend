@@ -62,7 +62,7 @@ def test():
 
 @app.route('/api/login', methods = ['GET'])
 def login_user():
-    """global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
+    global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
     user_id = sp.me()['id']
     user_name = sp.me()['display_name']
@@ -74,14 +74,15 @@ def login_user():
     with session_scope(db) as session:
         update_user_data(user_id, db, session)
 
-    return str(user_name) """
+    return str(user_name) 
+    """
     sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     print("ooh")
-    return auth_url
+    return auth_url"""
 
-@app.route("/api_callback")
+@app.route("/api_callback/")
 def api_callback():
     # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
     sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
