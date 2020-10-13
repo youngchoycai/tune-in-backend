@@ -15,7 +15,7 @@ import base64
 import os
 
 app = Flask("__main__")
-CORS(app)
+CORS(app, support_credentials=True)
 # db = Database()
 # party_id = 'able-shrewd-sunfish'
 # with session_scope(db) as session:
