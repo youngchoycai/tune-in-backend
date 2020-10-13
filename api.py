@@ -16,6 +16,7 @@ import os
 
 app = Flask("__main__")
 CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 # db = Database()
 # party_id = 'able-shrewd-sunfish'
 # with session_scope(db) as session:
