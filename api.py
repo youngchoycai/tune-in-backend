@@ -83,7 +83,7 @@ def login_user():
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     print("ooh")
-    return auth_url
+    return redirect(auth_url)
 
 @app.route("/api_callback/")
 def api_callback():
