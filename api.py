@@ -49,7 +49,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback"
+spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback/"
 
 @app.route('/', methods = ['GET'])
 def hello():
