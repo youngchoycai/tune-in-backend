@@ -1,5 +1,5 @@
-from flask import Flask
-from flask import request
+from flask import Flask, request, redirect 
+from flask import session as flasksession
 from flask_cors import CORS
 #from spot_auth import user_id, user_name, user_profile_pic
 from spot_calls import get_top_tracks, get_top_tracks_all_terms, get_top_artists_all_terms, get_top_artists, recommend_tracks, generate_party_playlist
@@ -49,7 +49,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = os.environ.get("SPOTIPY_REDIRECT_URI", None)
+spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback"
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -62,7 +62,7 @@ def test():
 
 @app.route('/api/login', methods = ['GET'])
 def login_user():
-    global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
+    """global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
     user_id = sp.me()['id']
     user_name = sp.me()['display_name']
@@ -74,7 +74,11 @@ def login_user():
     with session_scope(db) as session:
         update_user_data(user_id, db, session)
 
-    return str(user_name) 
+    return str(user_name) """
+    sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
+    auth_url = sp_oauth.get_authorize_url()
+    print(auth_url)
+    return redirect(auth_url)
     
 @app.route('/api/create', methods = ['GET'])
 def create_party():
