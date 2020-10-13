@@ -1,6 +1,6 @@
 from flask import Flask, request, redirect 
 from flask import session as flasksession
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 #from spot_auth import user_id, user_name, user_profile_pic
 from spot_calls import get_top_tracks, get_top_tracks_all_terms, get_top_artists_all_terms, get_top_artists, recommend_tracks, generate_party_playlist
 from database import Database, TopTracks, TopArtists, Users, Party, PartyTracks
@@ -62,7 +62,7 @@ def test():
 
 
 @app.route('/api/login', methods = ['GET'])
-@cross_origin()
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def login_user():
     global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
