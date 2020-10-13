@@ -55,6 +55,10 @@ spot_client_redirect = os.environ.get("SPOTIPY_REDIRECT_URI", None)
 def hello():
     return "hello"
 
+@app.route('/api/test', methods = ['GET'])
+def test():
+    return "kekw why doesnt this work"
+
 
 @app.route('/api/login', methods = ['GET'])
 def login_user():
@@ -242,5 +246,7 @@ def leave_party(): # on click
 if __name__ == "__main__":    
     app.run(debug=True)
 """
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
