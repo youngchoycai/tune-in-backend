@@ -61,7 +61,6 @@ def test():
 
 
 @app.route('/api/login', methods = ['GET'])
-@cross_origin()
 def login_user():
     """global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
@@ -80,6 +79,20 @@ def login_user():
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     return redirect(auth_url)
+
+@app.route("/api_callback")
+def api_callback():
+    # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
+    sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
+    flasksession.clear()
+    code = request.args.get('code')
+    token_info = sp_oauth.get_access_token(code)
+
+    # Saving the access token along with all other token related info
+    flasksession["token_info"] = token_info
+
+
+    return redirect("index")
     
 @app.route('/api/create', methods = ['GET'])
 def create_party():
