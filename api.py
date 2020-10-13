@@ -47,12 +47,12 @@ user_id = None
 user_name = None
 user_profile_pic = None
 
-@app.route('/')
+@app.route('/', methods = ['GET'])
 def hello():
     return jsonify("hello")
 
 
-@app.route('/api/login')
+@app.route('/api/login', methods = ['GET'])
 def login_user():
     global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(creds.SPOTIPY_CLIENT_ID, creds.SPOTIPY_CLIENT_SECRET, creds.SPOTIPY_REDIRECT_URI, scope=scope))
@@ -68,7 +68,7 @@ def login_user():
 
     return str(user_name) 
     
-@app.route('/api/create')
+@app.route('/api/create', methods = ['GET'])
 def create_party():
     new_party_name = generate_slug(3)
     db = Database()
