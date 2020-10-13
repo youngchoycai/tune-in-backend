@@ -50,7 +50,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = "http://localhost:8888/" #"https://tune-in-pp-llc.herokuapp.com/api_callback/"
+spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback/" #"http://localhost:8888/" 
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -79,7 +79,7 @@ def login_user():
 
     return str(user_name) 
     """
-    sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
+    sp_oauth = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope))
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     print("ooh")
