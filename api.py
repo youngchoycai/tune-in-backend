@@ -87,6 +87,7 @@ def login_user():
 
 @app.route("/api_callback/")
 def api_callback():
+    """
     # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
     sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
     flasksession.clear()
@@ -98,6 +99,8 @@ def api_callback():
 
 
     return redirect("index")
+    """
+    return "aye lmao"
     
 @app.route('/api/create', methods = ['GET'])
 def create_party():
