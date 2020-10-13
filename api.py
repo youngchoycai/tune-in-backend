@@ -61,6 +61,7 @@ def test():
 
 
 @app.route('/api/login', methods = ['GET'])
+@cross_origin()
 def login_user():
     """global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
