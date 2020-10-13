@@ -12,6 +12,7 @@ import creds
 import json
 from coolname import generate_slug
 import base64
+import os
 
 app = Flask("__main__")
 CORS(app)
@@ -46,6 +47,9 @@ top_artists_all_terms = None
 user_id = None
 user_name = None
 user_profile_pic = None
+spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
+spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
+spot_client_redirect = os.environ.get("SPOTIPY_REDIRECT_URI", None)
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -55,7 +59,7 @@ def hello():
 @app.route('/api/login', methods = ['GET'])
 def login_user():
     global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(creds.SPOTIPY_CLIENT_ID, creds.SPOTIPY_CLIENT_SECRET, creds.SPOTIPY_REDIRECT_URI, scope=scope))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
     user_id = sp.me()['id']
     user_name = sp.me()['display_name']
     user_profile_pic = sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png'
