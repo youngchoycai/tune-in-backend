@@ -53,7 +53,7 @@ spot_client_redirect = os.environ.get("SPOTIPY_REDIRECT_URI", None)
 
 @app.route('/', methods = ['GET'])
 def hello():
-    return jsonify("hello")
+    return "hello"
 
 
 @app.route('/api/login', methods = ['GET'])
