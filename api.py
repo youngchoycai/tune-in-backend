@@ -80,16 +80,10 @@ def login_user():
     return str(user_name) 
     """
     sp_oauth = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope))
-    #auth_url = sp_oauth.get_authorize_url()
-    #print(auth_url)
-    #print("ooh")
-    #return redirect(auth_url)
-    #user_id = sp_oauth.me()['id']
-    results = sp_oauth.current_user_saved_tracks()
-    for idx, item in enumerate(results['items']):
-        track = item['track']
-        print(idx, track['artists'][0]['name'], " – ", track['name'])
-    return "uwu"
+    auth_url = sp_oauth.get_authorize_url()
+    print(auth_url)
+    print("ooh")
+    return auth_url
 
 @app.route("/api_callback/")
 def api_callback():
@@ -106,7 +100,7 @@ def api_callback():
 
     return redirect("index")
     """
-    return "aye lmao"
+    return "aye lm"
     
 @app.route('/api/create', methods = ['GET'])
 def create_party():
