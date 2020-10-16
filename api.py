@@ -12,7 +12,7 @@ import creds
 import json
 from coolname import generate_slug
 import base64
-from urllib.parse import quote
+
 
 import os
 
@@ -43,7 +43,7 @@ def session_scope(db):
         session.close()
 
 CACHE = ".userinfo"
-scope =  quote('playlist-modify-public user-read-email user-top-read') #user-follow-read
+scope =  'playlist-modify-public user-read-email user-top-read' #user-follow-read
 spotify_obj = None
 top_tracks_all_terms = None 
 top_artists_all_terms = None 
@@ -52,7 +52,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = quote("https://tune-in-pp-llc.herokuapp.com/api_callback/") #"http://localhost:8888/" 
+spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback/" #"http://localhost:8888/" 
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -81,11 +81,11 @@ def login_user():
 
     return str(user_name) 
     """
+    """
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
-    auth_url = sp_oauth.get_authorize_url()
-    print(auth_url)
-    print("ooh")
-    return auth_url
+    auth_url = sp_oauth.get_authorize_url()"""
+    
+    return json.dumps({'clientId': spot_client_id, 'redirectUri': spot_client_redirect, 'scope': scope})
 
 @app.route("/api_callback/")
 def api_callback():
