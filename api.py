@@ -89,29 +89,55 @@ def login_user():
 
 @app.route("/api_callback/")
 def api_callback():
-    """
+  
     # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
-    sp_oauth = spotipy.oauth2.SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope)
-    flasksession.clear()
-    code = request.args.get('code')
-    token_info = sp_oauth.get_access_token(code)
-
-    # Saving the access token along with all other token related info
-    flasksession["token_info"] = token_info
-
-
-    return redirect("index")
-    """
+    
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
     
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
 
-    # Saving the access token along with all other token related info
+    # Saving the access token in db along with all other token related info
+    # Also, saving initial user data to the db
+    sp = spotipy.Spotify(auth=token_info[access_token])
+    """
+    user_id = sp.me()['id']
+    user_name = sp.me()['display_name']
+    user_profile_pic = sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png'
+    top_tracks_all_terms = get_top_tracks_all_terms(sp)
+    top_artists_all_terms = get_top_artists_all_terms(sp)
+    """
+    user_object = {
+        'user_id': sp.me()['id'],
+        'user_name': sp.me()['display_name'],
+        'profile_pic': sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png',
+        'top_tracks': get_top_tracks_all_terms(sp),
+        'top_artists': get_top_artists_all_terms(sp),
+        'access_token': token_info['access_token'],
+        'refresh_token': token_info['refresh_token'],
+        'token_expiration': token_info['expires_at']
+    }
+    db = Database()
+    with session_scope(db) as session:
+        update_user_data(user_object, db, session)
     
 
-    return str(token_info) 
+    return "uwu"
+
+def update_user_data(user_object, db, session):
+    # user_id = '696969'
+    user_id = user_object['user_id']
+    top_tracks_all_terms = user_object['top_tracks']
+    top_artists_all_terms = user_object['top_artists']
     
+    if db.user_exists_in_table(user_id, Users, session):
+        assert db.user_exists_in_table(user_id, TopTracks, session) and db.user_exists_in_table(user_id, TopArtists, session)
+        db.update_login_time(user_id, session)
+        db.save_user_tops(user_id, top_tracks_all_terms, top_artists_all_terms, session, update=True)
+    else:
+        db.create_user(user_object, session)
+        db.save_user_tops(user_id, top_tracks_all_terms, top_artists_all_terms, session)
+
 @app.route('/api/create', methods = ['GET'])
 def create_party():
     new_party_name = generate_slug(3)
@@ -177,15 +203,7 @@ def get_track_card_info(track_obj):
     song_url = track_obj["external_urls"]["spotify"]
     return [song_name, artist, track_image, song_url]
 
-def update_user_data(user_id, db, session):
-    # user_id = '696969'
-    if db.user_exists_in_table(user_id, Users, session):
-        assert db.user_exists_in_table(user_id, TopTracks, session) and db.user_exists_in_table(user_id, TopArtists, session)
-        db.update_login_time(user_id, session)
-        db.save_user_tops(user_id, top_tracks_all_terms, top_artists_all_terms, session, update=True)
-    else:
-        db.create_user(user_id, user_name, user_profile_pic, session)
-        db.save_user_tops(user_id, top_tracks_all_terms, top_artists_all_terms, session)
+
 
 def preview_party_playlist(party_id):
     # on click, calculates seeds for users in party and displays recommended tracks, can be refreshed
@@ -286,17 +304,3 @@ if __name__ == "__main__":
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-
-"""
-    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&response_type=code&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public+user-read-email+user-top-read
-    https://accounts.spotify.com/en/authorize?client_id=0e61efc53ed04155888413944e4982fa&redirect_uri=https:%2F%2Fsalty-beach-42139.herokuapp.com%2Fapi%2Fcallback&scope=user-read-email%20user-top-read&response_type=code
-    
-    https://accounts.spotify.com/en/authorize?client_id=2330b5ffbc5e4ff8906796e4a3fcb8c3&redirect_uri=https:%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
-    https://accounts.spotify.com/en/authorize?client_id=2330b5ffbc5e4ff8906796e4a3fcb8c3&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
-    
-    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&redirect_uri=https%253A%252F%252Ftune-in-pp-llc.herokuapp.com%252Fapi_callback%252F&scope=playlist-modify-public%2520user-read-email%2520user-top-read&response_type=code
-    
-    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
-    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&response_type=code&redirect_uri=https%253A%252F%252Ftune-in-pp-llc.herokuapp.com%252Fapi_callback%252F&scope=playlist-modify-public%2520user-read-email%2520user-top-read
-    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
-    """

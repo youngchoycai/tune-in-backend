@@ -23,8 +23,15 @@ class Database():
         self.connection = self.engine.connect()
         print("Database Instance created")
 
-    def create_user(self, user_id, user_name, user_profile_pic, session):
-        session.add(Users(user_id=user_id, display_name=user_name, profile_picture=user_profile_pic))
+    def create_user(self, user_object, session):
+        user_id = user_object['user_id']
+        user_name = user_object['user_name']
+        user_profile_pic = user_object['profile_pic']
+        access_token = user_object['access_token']
+        refresh_token = user_object['refresh_token']
+        token_expiration = user_object['token_expiration']
+
+        session.add(Users(user_id=user_id, display_name=user_name, profile_picture=user_profile_pic, access_token=access_token, refresh_token=refresh_token, token_expiration=token_expiration))
     
     def update_login_time(self, user_id, session):
         user = session.query(Users).filter(Users.user_id == user_id).first()
@@ -190,11 +197,14 @@ class Users(Base):
     user_id = Column(String)
     display_name = Column(String)
     profile_picture = Column(String)
+    access_token = Column(String)
+    refresh_token = Column(String)
+    token_expiration = Column(Integer)
     account_created_at = Column(DateTime, default=datetime.datetime.utcnow)
     last_login = Column(DateTime, default=datetime.datetime.utcnow)
 
     def __repr__(self):
-        return "<Users(user_id='%s', display_name='%s', profile_picture='%s')>" % (self.user_id, self.display_name, self.profile_picture)
+        return "<Users(user_id='%s', display_name='%s', profile_picture='%s', access_token='%s', refresh_token='%s', token_expiration='%s')>" % (self.user_id, self.display_name, self.profile_picture, self.access_token, self.refresh_token, self.token_expiration)
 
 class TopArtists(Base):
     __tablename__ = 'top_artists'
