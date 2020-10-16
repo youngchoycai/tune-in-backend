@@ -43,7 +43,7 @@ def session_scope(db):
         session.close()
 
 CACHE = ".userinfo"
-scope =  urllib.parse.quote('playlist-modify-public user-read-email user-top-read', safe='') #user-follow-read
+scope =  quote('playlist-modify-public user-read-email user-top-read', safe='') #user-follow-read
 spotify_obj = None
 top_tracks_all_terms = None 
 top_artists_all_terms = None 
@@ -52,7 +52,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = urllib.parse.quote("https://tune-in-pp-llc.herokuapp.com/api_callback/", safe='') #"http://localhost:8888/" 
+spot_client_redirect = quote("https://tune-in-pp-llc.herokuapp.com/api_callback/", safe='') #"http://localhost:8888/" 
 
 @app.route('/', methods = ['GET'])
 def hello():
