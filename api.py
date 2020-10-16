@@ -12,7 +12,7 @@ import creds
 import json
 from coolname import generate_slug
 import base64
-import urllib
+
 import os
 
 app = Flask("__main__")
@@ -42,7 +42,7 @@ def session_scope(db):
         session.close()
 
 CACHE = ".userinfo"
-scope =  urllib.quote('playlist-modify-public user-read-email user-top-read') #user-follow-read
+scope =  'playlist-modify-public user-read-email user-top-read' #user-follow-read
 spotify_obj = None
 top_tracks_all_terms = None 
 top_artists_all_terms = None 
@@ -51,7 +51,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect =  urllib.quote("https://tune-in-pp-llc.herokuapp.com/api_callback/") #"http://localhost:8888/" 
+spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback/" #"http://localhost:8888/" 
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -84,7 +84,7 @@ def login_user():
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
     print("ooh")
-    return auth_url
+    return 'xd' #auth_url
 
 @app.route("/api_callback/")
 def api_callback():
