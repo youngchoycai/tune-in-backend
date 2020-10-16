@@ -113,12 +113,15 @@ def update_user_data(user_object, db, session):
         db.create_user(user_object, session)
         db.save_user_tops(user_id, top_tracks_all_terms, top_artists_all_terms, session)
 
-@app.route('/api/create', methods = ['GET'])
+@app.route('/api/create', methods = ['POST'])
 def create_party():
-    new_party_name = generate_slug(3)
-    db = Database()
-    with session_scope(db) as session:
-        return party_creation_helper(new_party_name, user_id, db, session)
+    if request.method == 'POST':
+        json_data = request.get_json()
+        user_id = json_data['user_id']
+        new_party_name = generate_slug(3)
+        db = Database()
+        with session_scope(db) as session:
+            return party_creation_helper(new_party_name, user_id, db, session)
     
 #if people create multiple parties, we leave them. create function later to delete them after a day or something if no one else adds to it
 def party_creation_helper(party_id, user_id, db, session): 
@@ -131,6 +134,7 @@ def party_creation_helper(party_id, user_id, db, session):
 def join_party():
     if request.method == 'POST':
         json_data = request.get_json()
+        user_id = json_data['user_id']
         party_name = json_data['partyNameToJoin']
         db = Database()
         with session_scope(db) as session:
@@ -151,6 +155,7 @@ def party_joining_helper(user_id, party_id, db, session):
 def find_party_playlist():
     if request.method == 'POST':
         json_data = request.get_json()
+        user_id = json_data['user_id']
         party_name = json_data['partyNameToFind']
         db = Database()
         with session_scope(db) as session:
