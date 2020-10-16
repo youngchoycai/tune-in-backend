@@ -12,7 +12,7 @@ import creds
 import json
 from coolname import generate_slug
 import base64
-import urllib.parse.quote
+from urllib.parse import quote
 
 import os
 
