@@ -44,12 +44,6 @@ def session_scope(db):
 
 CACHE = ".userinfo"
 scope =  'playlist-modify-public user-read-email user-top-read' #user-follow-read
-spotify_obj = None
-top_tracks_all_terms = None 
-top_artists_all_terms = None 
-user_id = None
-user_name = None
-user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
 spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api/callback/" #"http://localhost:8888/" 
@@ -66,37 +60,16 @@ def test():
 @app.route('/api/login', methods = ['GET'])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def login_user():
-    """
-    global user_id, user_name, user_profile_pic, spotify_obj, top_artists_all_terms, top_tracks_all_terms
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(spot_client_id, spot_client_secret, spot_client_redirect, scope=scope))
-    #user_id = sp.me()['id']
-    user_name = sp.me()['display_name']
-   # user_profile_pic = sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png'
-    #spotify_obj = sp
-    #top_tracks_all_terms = get_top_tracks_all_terms(spotify_obj)
-    #top_artists_all_terms = get_top_artists_all_terms(spotify_obj)
-    #db = Database()
-    #with session_scope(db) as session:
-       # update_user_data(user_id, db, session)
-
-    return str(user_name) 
-    """
-    """
-    sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
-    auth_url = sp_oauth.get_authorize_url()"""
-    
     return json.dumps({'clientId': spot_client_id, 'redirectUri': spot_client_redirect, 'scope': scope})
 
 @app.route("/api/callback/")
 def callback():
-  
     # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
-    
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
-    
-    code = request.args.get('code')
+    code = request.args.get('code', default='error')
+    if code == 'error':
+        return redirect("https://localhost:3000")
     token_info = sp_oauth.get_access_token(code)
-
     # Saving the access token in db along with all other token related info
     # Also, saving initial user data to the db
     sp = spotipy.Spotify(auth=token_info['access_token'])
