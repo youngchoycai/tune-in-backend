@@ -43,7 +43,7 @@ def session_scope(db):
         session.close()
 
 CACHE = ".userinfo"
-scope =  quote('playlist-modify-public user-read-email user-top-read', safe='') #user-follow-read
+scope =  quote('playlist-modify-public user-read-email user-top-read') #user-follow-read
 spotify_obj = None
 top_tracks_all_terms = None 
 top_artists_all_terms = None 
@@ -52,7 +52,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = quote("https://tune-in-pp-llc.herokuapp.com/api_callback/", safe='') #"http://localhost:8888/" 
+spot_client_redirect = quote("https://tune-in-pp-llc.herokuapp.com/api_callback/") #"http://localhost:8888/" 
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -283,4 +283,5 @@ if __name__ == '__main__':
     https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&response_type=code&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public+user-read-email+user-top-read
     https://accounts.spotify.com/en/authorize?client_id=0e61efc53ed04155888413944e4982fa&redirect_uri=https:%2F%2Fsalty-beach-42139.herokuapp.com%2Fapi%2Fcallback&scope=user-read-email%20user-top-read&response_type=code
     https://accounts.spotify.com/en/authorize?client_id=2330b5ffbc5e4ff8906796e4a3fcb8c3&redirect_uri=https:%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
+    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&response_type=code&redirect_uri=https%253A%252F%252Ftune-in-pp-llc.herokuapp.com%252Fapi_callback%252F&scope=playlist-modify-public%2520user-read-email%2520user-top-read
     """
