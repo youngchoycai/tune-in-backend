@@ -102,7 +102,16 @@ def api_callback():
 
     return redirect("index")
     """
-    return "aye lmao"
+    sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
+    flasksession.clear()
+    code = request.args.get('code')
+    token_info = sp_oauth.get_access_token(code)
+
+    # Saving the access token along with all other token related info
+    flasksession["token_info"] = token_info
+
+
+    return "owo"
     
 @app.route('/api/create', methods = ['GET'])
 def create_party():
@@ -282,6 +291,13 @@ if __name__ == '__main__':
 """
     https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&response_type=code&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public+user-read-email+user-top-read
     https://accounts.spotify.com/en/authorize?client_id=0e61efc53ed04155888413944e4982fa&redirect_uri=https:%2F%2Fsalty-beach-42139.herokuapp.com%2Fapi%2Fcallback&scope=user-read-email%20user-top-read&response_type=code
+    
     https://accounts.spotify.com/en/authorize?client_id=2330b5ffbc5e4ff8906796e4a3fcb8c3&redirect_uri=https:%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
+    https://accounts.spotify.com/en/authorize?client_id=2330b5ffbc5e4ff8906796e4a3fcb8c3&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
+    
+    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&redirect_uri=https%253A%252F%252Ftune-in-pp-llc.herokuapp.com%252Fapi_callback%252F&scope=playlist-modify-public%2520user-read-email%2520user-top-read&response_type=code
+    
+    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
     https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&response_type=code&redirect_uri=https%253A%252F%252Ftune-in-pp-llc.herokuapp.com%252Fapi_callback%252F&scope=playlist-modify-public%2520user-read-email%2520user-top-read
+    https://accounts.spotify.com/authorize?client_id=%222330b5ffbc5e4ff8906796e4a3fcb8c3%22&redirect_uri=https%3A%2F%2Ftune-in-pp-llc.herokuapp.com%2Fapi_callback%2F&scope=playlist-modify-public%20user-read-email%20user-top-read&response_type=code
     """
