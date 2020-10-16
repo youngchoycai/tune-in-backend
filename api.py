@@ -99,7 +99,7 @@ def api_callback():
 
     # Saving the access token in db along with all other token related info
     # Also, saving initial user data to the db
-    sp = spotipy.Spotify(auth=token_info[access_token])
+    sp = spotipy.Spotify(auth=token_info['access_token'])
     """
     user_id = sp.me()['id']
     user_name = sp.me()['display_name']
