@@ -103,7 +103,7 @@ def api_callback():
     return redirect("index")
     """
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
-    #flasksession.clear()
+    flasksession.clear()
     #code = request.args.get('code')
     #token_info = sp_oauth.get_access_token(code)
 
