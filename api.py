@@ -245,7 +245,7 @@ def get_token(user_id):
         return token_info, token_valid """
     # Checking if token has expired
     now = int(time.time())
-    is_token_expired = token_info['token_expiration'] - now < 60
+    is_token_expired = (token_info['token_expiration'] - now) < 60
 
     # Refreshing token if it has expired
     if (is_token_expired):
