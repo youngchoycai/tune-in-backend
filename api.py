@@ -52,7 +52,7 @@ user_name = None
 user_profile_pic = None
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
-spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api_callback/" #"http://localhost:8888/" 
+spot_client_redirect = "https://tune-in-pp-llc.herokuapp.com/api/callback/" #"http://localhost:8888/" 
 
 @app.route('/', methods = ['GET'])
 def hello():
@@ -87,8 +87,8 @@ def login_user():
     
     return json.dumps({'clientId': spot_client_id, 'redirectUri': spot_client_redirect, 'scope': scope})
 
-@app.route("/api_callback/")
-def api_callback():
+@app.route("/api/callback/")
+def callback():
   
     # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
     
