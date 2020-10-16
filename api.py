@@ -12,7 +12,7 @@ import creds
 import json
 from coolname import generate_slug
 import base64
-
+import time
 
 import os
 
@@ -164,9 +164,9 @@ def find_party_playlist():
 def party_finding_helper(user_id, party_id, db, session):
     if db.party_id_exists_in_table(party_id, Party, session):
         if db.user_exists_in_party(user_id, party_id, session):
-            playlist = preview_party_playlist(party_id)
-            playlist_name = save_party_playlist(party_id)
-            playlist_link = get_playlist_link(playlist_name)
+            playlist = preview_party_playlist(user_id, party_id)
+            playlist_name = save_party_playlist(user_id, party_id)
+            playlist_link = get_playlist_link(user_id, playlist_name)
             return json.dumps({'playlistLink': playlist_link, 'cardInfo': scrape_tracks(playlist['tracks'], 7)})
         else: 
             return "Hey! You're not in this party!"
@@ -185,7 +185,7 @@ def get_track_card_info(track_obj):
 
 
 
-def preview_party_playlist(party_id):
+def preview_party_playlist(user_id, party_id):
     # on click, calculates seeds for users in party and displays recommended tracks, can be refreshed
     #party_id = fetch_party_id_from_url()
     db = Database()
@@ -195,7 +195,9 @@ def preview_party_playlist(party_id):
         shared_artists = db.get_shared(party_users, TopArtists, session)
         seed_tracks = db.get_k_seeds(shared_tracks, 3)
         seed_artists = db.get_k_seeds(shared_artists, 2)
-        results = recommend_tracks(spotify_obj, tracks=seed_tracks, artists=seed_artists)
+        token_info, authorized = get_token(user_id)
+        sp = spotipy.Spotify(auth=token_info['access_token'])
+        results = recommend_tracks(sp, tracks=seed_tracks, artists=seed_artists)
 
         # save results to database
         if db.party_id_exists_in_table(party_id, PartyTracks, session):
@@ -210,7 +212,7 @@ def preview_party_playlist(party_id):
     # for track in results['tracks']:
     #     print(track['name'], "by", track['artists'][0]['name'])
 
-def save_party_playlist(party_id): # button appears after displaying recommended tracks
+def save_party_playlist(user_id, party_id): # button appears after displaying recommended tracks
     #party_id = fetch_party_id_from_url()
     db = Database()
     with session_scope(db) as session:
@@ -220,13 +222,39 @@ def save_party_playlist(party_id): # button appears after displaying recommended
     playlist_desc = "ah sahhhhhhhhh düd"
     with open("playlistpic.jpg", "rb") as image_file:
         playlist_jpg = base64.b64encode(image_file.read())
+    token_info, authorized = get_token(user_id)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
     #spotify_obj.playlist_upload_cover_image(playlist_name, playlist_jpg)
-    return generate_party_playlist(spotify_obj, user_id, playlist_name, recommended_tracks, playlist_desc, playlist_jpg)
+    return generate_party_playlist(sp, user_id, playlist_name, recommended_tracks, playlist_desc, playlist_jpg)
     
-def get_playlist_link(playlist_id):
-    playlist_link = spotify_obj.playlist(playlist_id, fields = "external_urls")
+def get_playlist_link(user_id, playlist_id):
+    token_info, authorized = get_token(user_id)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    playlist_link = sp.playlist(playlist_id, fields = "external_urls")
     return playlist_link["external_urls"]["spotify"]
 
+def get_token(user_id):
+    token_valid = False
+    db = Database()
+    with session_scope(db) as session:
+        token_info = db.get_user_token_info(user_id, session)
+    # Checking if the session already has a token stored
+    """
+    if not (session.get('token_info', False)):
+        token_valid = False
+        return token_info, token_valid """
+    # Checking if token has expired
+    now = int(time.time())
+    is_token_expired = token_info['token_expiration'] - now < 60
+
+    # Refreshing token if it has expired
+    if (is_token_expired):
+        # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
+        sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
+        token_info = sp_oauth.refresh_access_token(token_info['refresh_token'])
+
+    token_valid = True
+    return token_info, token_valid
 """
 @app.route("/")
 def login_redirect():

@@ -51,6 +51,12 @@ class Database():
         statement = table.__table__.update().where(table.user_id == bindparam('b_user_id')).where(table.rank == bindparam('b_rank')).values(short_term=bindparam('b_short_term'), medium_term=bindparam('b_medium_term'), long_term=bindparam('b_long_term'))
         session.execute(statement, entries)
     
+    def get_user_token_info(self, user_id, session):
+        user = session.query(Users).filter(Users.user_id == user_id).first()
+        return {'access_token': user.access_token, 
+                'refresh_token': user.refresh_token,
+                'token_expiration': user.token_expiration}
+
     # def delete_user_from_database(self, user_id, session):
     #     from sqlalchemy import MetaData
     #     m = MetaData()
