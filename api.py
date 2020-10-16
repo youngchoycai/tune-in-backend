@@ -104,10 +104,14 @@ def update_user_data(user_object, db, session):
     user_id = user_object['user_id']
     top_tracks_all_terms = user_object['top_tracks']
     top_artists_all_terms = user_object['top_artists']
+    access_token = user_object['access_token']
+    refresh_token = user_object['refresh_token']
+    token_expiration = user_object['token_expiration']
     
     if db.user_exists_in_table(user_id, Users, session):
         assert db.user_exists_in_table(user_id, TopTracks, session) and db.user_exists_in_table(user_id, TopArtists, session)
         db.update_login_time(user_id, session)
+        db.update_token_info(user_id, access_token, refresh_token, token_expiration, session)
         db.save_user_tops(user_id, top_tracks_all_terms, top_artists_all_terms, session, update=True)
     else:
         db.create_user(user_object, session)

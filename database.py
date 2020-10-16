@@ -56,7 +56,11 @@ class Database():
         return {'access_token': user.access_token, 
                 'refresh_token': user.refresh_token,
                 'token_expiration': user.token_expiration}
-
+    def update_token_info(self, user_id, access_token, refresh_token, token_expiration, session):
+        user = session.query(Users).filter(Users.user_id == user_id).first()
+        user.access_token = access_token
+        user.refresh_token = refresh_token
+        user.token_expiration = token_expiration
     # def delete_user_from_database(self, user_id, session):
     #     from sqlalchemy import MetaData
     #     m = MetaData()
