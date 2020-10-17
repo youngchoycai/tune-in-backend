@@ -42,7 +42,6 @@ def session_scope(db):
     finally:
         session.close()
 
-CACHE = ".userinfo"
 scope =  'playlist-modify-public user-read-email user-top-read' #user-follow-read
 spot_client_id = os.environ.get("SPOTIPY_CLIENT_ID", None)
 spot_client_secret = os.environ.get("SPOTIPY_CLIENT_SECRET", None)
