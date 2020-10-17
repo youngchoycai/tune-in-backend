@@ -68,7 +68,7 @@ def callback():
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
     code = request.args.get('code', default='error')
     if code == 'error':
-        return redirect("http://localhost:3000") #redirect back to the front of the website localhost is for testing
+        return redirect("http://youngchoycai.github.io/tunein/#/") #redirect back to the front of the website localhost is for testing
     token_info = sp_oauth.get_access_token(code)
     # Saving the access token in db along with all other token related info
     # Also, saving initial user data to the db
@@ -96,7 +96,7 @@ def callback():
     
     user_id = user_object['user_id']
     user_name = user_object['user_name']
-    link = "http://localhost:3000/partytime/userID={user_id}/userName={user_name}/loggedIn=true".format(user_id = user_id, user_name = user_name)
+    link = "http://youngchoycai.github.io/tunein/#/partytime/userID={user_id}/userName={user_name}/loggedIn=true".format(user_id = user_id, user_name = user_name)
     return redirect(link)
 
 def update_user_data(user_object, db, session):
