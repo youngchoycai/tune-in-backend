@@ -7,9 +7,10 @@ import sqlalchemy as sql
 import psycopg2
 import datetime
 import os 
-SERVER = 'ec2-52-1-95-247.compute-1.amazonaws.com'
-DATABASE = 'd5590mmicjpgm0'
-USERNAME = 'bhjuosaogvrhfz'
+
+SERVER = os.environ.get("SERVER", None)
+DATABASE = os.environ.get("DATABASE", None)
+USERNAME = os.environ.get("USERNAME", None)
 PASSWORD = os.environ.get("PASSWORD", None)
 DATABASE_CONNECTION = f'postgresql+psycopg2://{USERNAME}:{PASSWORD}@{SERVER}/{DATABASE}'
 
