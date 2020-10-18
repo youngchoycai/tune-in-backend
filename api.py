@@ -64,6 +64,11 @@ def login_user():
 @app.route("/api/callback/")
 def callback():
     # Don't reuse a SpotifyOAuth object because they store token info and you could leak user tokens if you reuse a SpotifyOAuth object
+    try:
+        os.remove("/app/.cache")
+    except FileNotFoundError:
+        print "no cache, carry on"
+    
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
     code = request.args.get('code', default='error')
     if code == 'error':
@@ -75,8 +80,7 @@ def callback():
     """
     user_id = sp.me()['id']
     user_name = sp.me()['display_name']
-    user_profile_pic = sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png'
-    top_tracks_all_terms = get_top_tracks_all_terms(sp)
+    user_profile_pic = sp.me()['images'][0][ l_terms(sp)
     top_artists_all_terms = get_top_artists_all_terms(sp)
     """
     user_object = {
@@ -191,6 +195,10 @@ def get_track_card_info(track_obj):
 def preview_party_playlist(user_id, party_id):
     # on click, calculates seeds for users in party and displays recommended tracks, can be refreshed
     #party_id = fetch_party_id_from_url()
+    try:
+        os.remove("/app/.cache")
+    except FileNotFoundError:
+        print "no cache, carry on"
     db = Database()
     with session_scope(db) as session:
         party_users = db.get_party_users(party_id, session)
@@ -217,6 +225,10 @@ def preview_party_playlist(user_id, party_id):
 
 def save_party_playlist(user_id, party_id): # button appears after displaying recommended tracks
     #party_id = fetch_party_id_from_url()
+    try:
+        os.remove("/app/.cache")
+    except FileNotFoundError:
+        print "no cache, carry on"
     db = Database()
     with session_scope(db) as session:
         recommended_tracks = db.get_party_tracks(party_id, session)
@@ -231,12 +243,20 @@ def save_party_playlist(user_id, party_id): # button appears after displaying re
     return generate_party_playlist(sp, user_id, playlist_name, recommended_tracks, playlist_desc, playlist_jpg)
     
 def get_playlist_link(user_id, playlist_id):
+    try:
+        os.remove("/app/.cache")
+    except FileNotFoundError:
+        print "no cache, carry on"
     token_info, authorized = get_token(user_id)
     sp = spotipy.Spotify(auth=token_info['access_token'])
     playlist_link = sp.playlist(playlist_id, fields = "external_urls")
     return playlist_link["external_urls"]["spotify"]
 
 def get_token(user_id):
+    try:
+        os.remove("/app/.cache")
+    except FileNotFoundError:
+        print "no cache, carry on"
     token_valid = False
     db = Database()
     with session_scope(db) as session:
