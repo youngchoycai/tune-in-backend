@@ -233,8 +233,8 @@ def save_party_playlist(user_id, party_id): # button appears after displaying re
     with session_scope(db) as session:
         recommended_tracks = db.get_party_tracks(party_id, session)
 
-    playlist_name = "it is PIZZATIME."
-    playlist_desc = "ah sahhhhhhhhh düd"
+    playlist_name = "Tune-in's Playlist for You"
+    playlist_desc = "A playlist curated from you and your friends' favorite music."
     with open("playlistpic.jpg", "rb") as image_file:
         playlist_jpg = base64.b64encode(image_file.read())
     token_info, authorized = get_token(user_id)
