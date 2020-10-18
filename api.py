@@ -84,7 +84,7 @@ def callback():
     user_object = {
         'user_id': sp.me()['id'],
         'user_name': sp.me()['display_name'],
-        'profile_pic': sp.me()['images'][0]['url'] if not '' else 'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png',
+        'profile_pic':'https://www.uokpl.rs/fpng/d/490-4909214_swag-wooper-png.png',
         'top_tracks': get_top_tracks_all_terms(sp),
         'top_artists': get_top_artists_all_terms(sp),
         'access_token': token_info['access_token'],
