@@ -67,7 +67,7 @@ def callback():
     try:
         os.remove("/app/.cache")
     except FileNotFoundError:
-        print "no cache, carry on"
+        print("no cache, carry on")
     
     sp_oauth = spotipy.oauth2.SpotifyOAuth(client_id = spot_client_id, client_secret = spot_client_secret,redirect_uri = spot_client_redirect, scope=scope)
     code = request.args.get('code', default='error')
@@ -198,7 +198,7 @@ def preview_party_playlist(user_id, party_id):
     try:
         os.remove("/app/.cache")
     except FileNotFoundError:
-        print "no cache, carry on"
+        print("no cache, carry on")
     db = Database()
     with session_scope(db) as session:
         party_users = db.get_party_users(party_id, session)
@@ -228,7 +228,7 @@ def save_party_playlist(user_id, party_id): # button appears after displaying re
     try:
         os.remove("/app/.cache")
     except FileNotFoundError:
-        print "no cache, carry on"
+        print("no cache, carry on")
     db = Database()
     with session_scope(db) as session:
         recommended_tracks = db.get_party_tracks(party_id, session)
@@ -246,7 +246,7 @@ def get_playlist_link(user_id, playlist_id):
     try:
         os.remove("/app/.cache")
     except FileNotFoundError:
-        print "no cache, carry on"
+        print("no cache, carry on")
     token_info, authorized = get_token(user_id)
     sp = spotipy.Spotify(auth=token_info['access_token'])
     playlist_link = sp.playlist(playlist_id, fields = "external_urls")
@@ -256,7 +256,7 @@ def get_token(user_id):
     try:
         os.remove("/app/.cache")
     except FileNotFoundError:
-        print "no cache, carry on"
+        print("no cache, carry on")
     token_valid = False
     db = Database()
     with session_scope(db) as session:
