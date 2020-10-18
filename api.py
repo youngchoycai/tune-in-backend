@@ -1,14 +1,12 @@
 from flask import Flask, request, redirect 
 from flask import session as flasksession
 from flask_cors import CORS, cross_origin
-#from spot_auth import user_id, user_name, user_profile_pic
 from spot_calls import get_top_tracks, get_top_tracks_all_terms, get_top_artists_all_terms, get_top_artists, recommend_tracks, generate_party_playlist
 from database import Database, TopTracks, TopArtists, Users, Party, PartyTracks
 from sqlalchemy.orm import Session
 from contextlib import contextmanager
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import creds
 import json
 from coolname import generate_slug
 import base64

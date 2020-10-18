@@ -1,5 +1,3 @@
-#from spot_auth import sp, user_id
-
 ITEM_LIMIT = 50
 
 def get_top_tracks(spotify_obj, term, limit=ITEM_LIMIT):

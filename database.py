@@ -6,7 +6,6 @@ from coolname import generate_slug
 import sqlalchemy as sql
 import psycopg2
 import datetime
-import creds
 import os 
 SERVER = 'ec2-52-1-95-247.compute-1.amazonaws.com'
 DATABASE = 'd5590mmicjpgm0'
