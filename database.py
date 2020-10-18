@@ -125,6 +125,7 @@ class Database():
         Returns:
             List containing lists of spotify uris and individual ranks sorted by their sum
         """
+        terms = [row.short_term] #[row.short_term, row.medium_term, row.long_term]
         user_data = [] # list of queries
         for user_id in user_list:
             user_data.append(session.query(table).filter(table.user_id == user_id))
@@ -133,7 +134,7 @@ class Database():
             for row in user_query:
                 user_id = row.user_id
                 rank = row.rank
-                for track_in_term in [row.short_term, row.medium_term, row.long_term]:
+                for track_in_term in terms:
                     if track_in_term in shared_data_dict and user_id not in shared_data_dict[track_in_term]: # only counts first instance of track in all terms for each user (skewed toward short term)
                         shared_data_dict[track_in_term][user_id] = rank
                     else:
